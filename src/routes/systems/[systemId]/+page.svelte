@@ -10,14 +10,22 @@
 <Menu>
   <MenuTitle
     title='Sheets'
-    icon='plus'
-    iconHoverColor='text-success'
   >
+    <svelte:fragment slot='title'>
+      <Icon
+        icon='plus'
+        cssClass='hover:text-success'
+      />
+    </svelte:fragment>
   </MenuTitle>
   <MenuTitle
     title='Entities'
-    icon='plus'
-    iconHoverColor='text-success'
   >
+    <svelte:fragment slot='title'>
+      <Icon
+        icon='plus'
+        cssClass='hover:text-success'
+      />
+    </svelte:fragment>
   </MenuTitle>
 </Menu>
