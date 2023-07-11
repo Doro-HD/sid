@@ -12,7 +12,18 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "fs": {
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "createDir": true,
+        "renameFile": true,
+        "scope": [
+          "$APPDATA/systems",
+          "$APPDATA/systems/*"
+        ]
+      }
     },
     "bundle": {
       "active": true,

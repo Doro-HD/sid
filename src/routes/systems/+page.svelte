@@ -1,5 +1,7 @@
 <script lang='ts'>
+  import { onMount } from 'svelte'
   import { slide } from 'svelte/transition'
+  import { openDir, addDir, rename } from '$lib/tauri/fs.ts'
   import Hero from '$lib/components/Hero.svelte'
   import Button from '$lib/components/Button.svelte'
   import Card from '$lib/components/Card.svelte'
@@ -8,7 +10,6 @@
   let newSystemName = ''
   let isCreateError = false
 
-  let updateSystemId = ''
   let updateSystemName = ''
   let tempUpdateSystemName = ''
   let isUpdateError = false
@@ -17,9 +18,18 @@
 
   let isModalOpen = false
 
-  let systems = new Map<string, string>()
+  let systems: string[] = []
 
-  function createNewSystem() {
+  onMount(async () => {
+    const data = await openDir('systems')
+
+    if (data.has('files')) {
+      const files = data.get('files').map(file => file.name)
+      systems = files
+    }
+  })
+
+  async function createNewSystem() {
     //exit point
     if (newSystemName.length < 1) {
       isCreateError = true
@@ -27,16 +37,25 @@
       return
     }
 
+    //exit point
+    if (systems.has(newSystemName)) {
+      isCreateError = true
+
+      return
+    }
+
+    const data = await addDir(newSystemName)
+
     //if there was a previous error the message will be removed here
     isCreateError = false
 
-    systems.set(crypto.randomUUID(), newSystemName)
+    systems.push(newSystemName)
     newSystemName = ''
 
     systems = systems
   }
 
-  function updateSystem() {
+  async function updateSystem() {
     //exit point
     if (tempUpdateSystemName.length < 1) {
       isUpdateError = true
@@ -46,15 +65,21 @@
 
     isUpdateError = false
 
-    systems.set(updateSystemId, tempUpdateSystemName)
+    const data = await rename(`systems/${updateSystemName}`, `systems/${tempUpdateSystemName}`)
+    //exit point
+    if (!data.get('success')) {
+      return
+    }
+
+    const systemIndex = systems.findIndex(system => system === updateSystemName)
+    systems[systemIndex] = tempUpdateSystemName
     systems = systems
 
     isModalOpen = false
   }
 
-  function openModal(systemId: string) {
-    updateSystemId = systemId
-    updateSystemName = systems.get(systemId)
+  function openModal(systemName: string) {
+    updateSystemName = systems.find(system => system === systemName)
 
     tempUpdateSystemName = updateSystemName
 
@@ -92,14 +117,14 @@
 
 <!-- todo: fix bug, row never stops -->
 <div class='flex flex-row flex-wrap'>
-  {#each systems as [systemId, systemName] (systemId)}
+  {#each systems as system}
     <span transition:slide>
       <Card
-        title={systemName}
+        title={system}
         cssClass='ml-3 mb-3'
-        on:edit={() => openModal(systemId)}
+        on:edit={() => openModal(system)}
       >
-        <a href='/systems/{systemId}' class='link link-secondary'>Open</a>
+        <a href='/systems/{system}' class='link link-secondary'>Open</a>
       </Card>
     </span>
   {/each}

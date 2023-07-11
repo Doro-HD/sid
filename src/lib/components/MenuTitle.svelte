@@ -1,6 +1,4 @@
 <script lang='ts'>
-  import Icon from '$lib/components/Icon.svelte'
-
   export let title: string
 </script>
 <li>
