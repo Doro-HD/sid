@@ -1,7 +1,9 @@
 <script lang='ts'>
   import { onMount } from 'svelte'
   import { slide } from 'svelte/transition'
-  import { openDir, addDir, rename } from '$lib/tauri/fs.ts'
+
+  import { openDir, addDir, rename } from '$lib/tauri/fs'
+
   import Hero from '$lib/components/Hero.svelte'
   import Button from '$lib/components/Button.svelte'
   import Card from '$lib/components/Card.svelte'
@@ -23,10 +25,8 @@
   onMount(async () => {
     const data = await openDir('systems')
 
-    if (data.has('files')) {
-      const files = data.get('files').map(file => file.name)
-      systems = files
-    }
+    const files = data.files.map(file => file.name ?? 'Error: could not read file')
+    systems = files
   })
 
   async function createNewSystem() {
@@ -38,13 +38,20 @@
     }
 
     //exit point
-    if (systems.has(newSystemName)) {
+    if (systems.find(system => system === newSystemName)) {
       isCreateError = true
 
       return
     }
 
     const data = await addDir(newSystemName)
+    const sheetData = await addDir(`${newSystemName}/sheets`)
+    const entityData = await addDir(`${newSystemName}/entities`)
+
+    //exit point
+    if (!data.success || !sheetData.success || !entityData.success) {
+      return
+    }
 
     //if there was a previous error the message will be removed here
     isCreateError = false
@@ -67,7 +74,7 @@
 
     const data = await rename(`systems/${updateSystemName}`, `systems/${tempUpdateSystemName}`)
     //exit point
-    if (!data.get('success')) {
+    if (!data.success) {
       return
     }
 
@@ -79,8 +86,13 @@
   }
 
   function openModal(systemName: string) {
-    updateSystemName = systems.find(system => system === systemName)
+    const systemFound = systems.find(system => system === systemName)
+    //exit point
+    if (systemFound === undefined) {
+      return
+    }
 
+    updateSystemName = systemFound
     tempUpdateSystemName = updateSystemName
 
     isModalOpen = true
@@ -115,7 +127,6 @@
   />
 </form>
 
-<!-- todo: fix bug, row never stops -->
 <div class='flex flex-row flex-wrap'>
   {#each systems as system}
     <span transition:slide>

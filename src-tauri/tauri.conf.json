@@ -21,7 +21,8 @@
         "renameFile": true,
         "scope": [
           "$APPDATA/systems",
-          "$APPDATA/systems/*"
+          "$APPDATA/systems/*",
+          "$APPDATA/systems/*/**"
         ]
       }
     },

@@ -1,52 +1,69 @@
-import { readDir, createDir, renameFile, BaseDirectory, type FileEntry } from '@tauri-apps/api/fs'
+import { readable } from 'svelte/store'
+
+import {
+  readDir,
+  createDir,
+  renameFile,
+  BaseDirectory,
+  type FileEntry
+} from '@tauri-apps/api/fs'
+
+type FsResult = {
+  success: boolean
+  error: null|unknown
+}
+
+type FsFileResult = FsResult & {
+  files: FileEntry[]
+}
+
+const paths = readable({ systems: 'systems', sheets: 'sheets', entities: 'entities' })
 
 async function openDir(dirName: string) {
-  const data = new Map<'success' | 'error' | 'files', boolean | FileEntry[]| unknown>()
+  const data: FsFileResult = { success: false, error: null, files: [] }
 
   try {
     const files = await readDir(dirName, { dir: BaseDirectory.AppData, recursive: true })
 
-    data.set('success', true)
-    data.set('files', files)
+    data.success =  true
+    data.files = files
   } catch (err) {
-    data.set('success', false)
-    data.set('error' ,err)
+    data.error = err
   }
 
   return data
 }
 
 async function addDir(dirName: string) {
-  const data = new Map<'success' | 'error', boolean | unknown>()
+  const data: FsResult = { success: false, error: null }
 
   try {
     await createDir(`systems/${dirName}`, { dir: BaseDirectory.AppData, recursive: true })
 
-    data.set('success', true)
+    data.success = true
   } catch (err) {
-    data.set('success', false)
-    data.set('error' ,err)
+    data.error = err
   }
 
   return data
 }
 
 async function rename(oldName: string, newName: string) {
-  const data = new Map<'success' | 'error', boolean | unknown>()
+  const data: FsResult = { success: false, error: null }
 
   try {
     await renameFile(oldName, newName, { dir: BaseDirectory.AppData })
 
-    data.set('success', true)
+    data.success = true
   } catch (err) {
-    data.set('success', false)
-    data.set('error' ,err)
+    data.error = err
   }
 
   return data
 }
 
 export {
+  paths,
   openDir,
   addDir,
   rename
