@@ -1,1 +1,1 @@
-<p>test</p>
+<h1 class='text-xl'>Placeholder</h1>

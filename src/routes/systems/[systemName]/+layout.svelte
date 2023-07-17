@@ -49,9 +49,9 @@
         </svelte:fragment>
         {#each sheets as sheet}
           <li>
-            <p>
+            <a href='/systems/{systemName}/sheets/{sheet}'>
               {sheet}
-            </p>
+            </a>
           </li>
         {/each}
       </MenuTitle>
