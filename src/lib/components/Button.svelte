@@ -1,7 +1,6 @@
 <script lang='ts'>
   import { createEventDispatcher } from "svelte";
 
-  export let text: string
   export let type: 'button' | 'submit' | 'reset' = 'button'
   export let cssClass = ''
   export let color = 'secondary'
@@ -13,4 +12,6 @@
   {type}
   class='btn btn-outline btn-{color} btn-sm {cssClass}'
   on:click={() => dispatcher('click')}
->{text}</button>
+>
+  <slot />
+</button>

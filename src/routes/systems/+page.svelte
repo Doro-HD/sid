@@ -121,10 +121,9 @@
     </label>
   {/if}
   <Button
-    text='Create new system'
     type='submit'
     cssClass='mx-auto'
-  />
+  >Create new system</Button>
 </form>
 
 <div class='flex flex-row flex-wrap'>

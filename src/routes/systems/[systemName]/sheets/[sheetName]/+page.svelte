@@ -3,6 +3,8 @@
   import Tabs from '$lib/components/Tabs.svelte'
   import Tab from '$lib/components/Tab.svelte'
   import Button from '$lib/components/Button.svelte'
+  import Icon from '$lib/components/Icon.svelte'
+  import Dragable from '$lib/components/Dragable.svelte'
 
   let pages = ['Main']
 
@@ -26,8 +28,12 @@
     size={tabSize}
     isActive={false}
   >
-    <Button
-      text='+'
-    ></Button>
+    <Button>
+      <Icon icon='plus' />
+    </Button>
   </Tab>
 </Tabs>
+
+<Dragable>
+  <p>test</p>
+</Dragable>
