@@ -7,4 +7,8 @@
   const dispatcher = createEventDispatcher()
 </script>
 
-<iconify-icon icon='lucide:{icon}' class={cssClass} on:click={() => dispatcher('click')}></iconify-icon>
+<iconify-icon
+  icon='lucide:{icon}'
+  class={cssClass}
+  on:click={() => dispatcher('click')}
+></iconify-icon>

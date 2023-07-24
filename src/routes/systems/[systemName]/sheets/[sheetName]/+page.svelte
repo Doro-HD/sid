@@ -29,7 +29,9 @@
     isActive={false}
   >
     <Button>
-      <Icon icon='plus' />
+      <Icon
+        icon='plus'
+      />
     </Button>
   </Tab>
 </Tabs>

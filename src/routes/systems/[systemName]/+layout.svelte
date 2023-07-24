@@ -33,6 +33,14 @@
     sheets = sheetData.files.map(file => removeFileExtention(file.name))
     entities = entityData.files.map(file => removeFileExtention(file.name))
   })
+
+  function createSheet() {
+    
+  }
+
+  function createEntity() {
+    
+  }
 </script>
 
 <div class='flex flex-row'>
@@ -45,6 +53,7 @@
           <Icon
             icon='plus'
             cssClass='hover:text-success'
+            on:click={createSheet}
           />
         </svelte:fragment>
         {#each sheets as sheet}
@@ -62,6 +71,7 @@
           <Icon
             icon='plus'
             cssClass='hover:text-success'
+            on:click={createEntity}
           />
         </svelte:fragment>
       </MenuTitle>
