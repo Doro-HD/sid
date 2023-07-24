@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
   import { page } from '$app/stores'
 
-  import { paths, openDir } from '$lib/tauri/fs'
+  import { paths, createJsonFile, openDir } from '$lib/tauri/fs'
 
   import Menu from '$lib/components/Menu.svelte'
   import MenuTitle from '$lib/components/MenuTitle.svelte'
@@ -12,6 +12,10 @@
 
   let sheets: string[] = []
   let entities: string[] = []
+
+  //used to create and update sheet and entity name
+  let createResourceName = ''
+  let updateResourceName = ''
 
   onMount(async () => {
     const sheetData = await openDir(`${$paths.systems}/${systemName}/sheets`)
@@ -34,12 +38,12 @@
     entities = entityData.files.map(file => removeFileExtention(file.name))
   })
 
-  function createSheet() {
-    
+  async function createSheet() {
+    const result = await createJsonFile(createResourceName, {})
   }
 
-  function createEntity() {
-    
+  async function createEntity() {
+    const result = await createJsonFile(createResourceName, {})
   }
 </script>
 
