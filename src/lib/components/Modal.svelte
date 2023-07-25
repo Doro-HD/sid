@@ -32,14 +32,16 @@
 
     <div class='modal-action justify-between'>
       <Button
-        text='Save'
         on:click={save}
-      />
+      >
+        Save
+      </Button>
       <Button
-        text='Cancel'
         color='error'
         on:click={cancel}
-      />
+      >
+        Cancel
+      </Button>
     </div>
   </div>
 </div>
